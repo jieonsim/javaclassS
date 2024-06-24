@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javaclassS.dao.StudyDAO">
+
+	<!-- select 처럼 반환하는 것은 resultType이 무조건 있어야한다. -->
+	<select id="getUserMids" resultType="String">
+		select mid from user
+	</select>
+
+	<select id="getUserDetails" parameterType="String" resultType="HashMap">
+		select * from user where mid = #{mid}
+	</select>
+
+	<select id="getUserMidSearch" resultType="com.spring.javaclassS.vo.UserVO">
+		select * from user where mid = #{mid}
+	</select>
+
+	<select id="getUserMidList" resultType="com.spring.javaclassS.vo.UserVO">
+		select * from user where mid like concat ('%', #{mid}, '%') order by mid;
+	</select>
+
+	<select id="getListCrimeDate" resultType="com.spring.javaclassS.vo.CrimeVO">
+		select * from crime where year = #{year} order by police;
+	</select>
+
+	<select id="getYearPoliceCheck" resultType="com.spring.javaclassS.vo.CrimeVO">
+		select * from crime where year = #{year} and police like concat(#{police},'%') order by police ${yearOrder};
+		<!-- # : 값 / $ : 변수개념 -->
+		<!-- ${yearOrder}에는 jsp에서 value로 넘긴 asc, desc이 들어옴 -->
+	</select>
+
+	<select id="getAnalyzeTotal" resultType="com.spring.javaclassS.vo.CrimeVO">
+		select year,sum(robbery) as totRobbery,sum(murder) as totMurder,sum(theft) as totTheft,sum(violence) as totViolence,
+		avg(robbery) as avgRobbery,avg(murder) as avgMurder,avg(theft) as avgTheft,avg(violence) as avgViolence
+		from crime where year = #{year} and police like concat(#{police},'%');
+	</select>
+	
+	<select id="getMemberDetails" resultType="com.spring.javaclassS.vo.MemberVO">
+		select mid, name, email from member2
+	</select>
+
+	<insert id="setSaveCrimeDate">
+		insert into crime values (default, #{vo.year}, #{vo.police}, #{vo.robbery}, #{vo.theft}, #{vo.murder}, #{vo.violence});
+	</insert>
+
+	<delete id="setDeleteCrimeDate">
+		delete from crime where year = #{year};
+	</delete>
+</mapper>

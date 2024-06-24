@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userNS">
+	<select id="getUserList" resultType="com.spring.javaclassS.vo.UserVO">
+		select * from user order by idx desc;
+	</select>
+
+	<select id="getUserIdSearch" resultType="com.spring.javaclassS.vo.UserVO">
+		select * from user where mid like concat('%',#{mid},'%') order by idx desc;
+	</select>
+
+	<insert id="setUserInputOk" parameterType="com.spring.javaclassS.vo.UserVO">
+		insert into user values (default, #{mid}, #{name}, #{age}, #{address});
+	</insert>
+
+	<update id="setUserUpdateOk" parameterType="com.spring.javaclassS.vo.UserVO">
+		update user set mid=#{mid}, name=#{name}, age=#{age}, address=#{address} where idx = #{idx};
+	</update>
+
+	<delete id="setUserDelete">
+		delete from user where idx = #{idx};
+	</delete>
+</mapper>

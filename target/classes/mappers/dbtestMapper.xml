@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javaclassS.dao.DbtestDAO">
+	<select id="getDbtestList" resultType="com.spring.javaclassS.vo.UserVO">
+		select * from user order by idx desc;
+	</select>
+
+	<select id="getDbtestSearch" resultType="com.spring.javaclassS.vo.UserVO">
+		select * from user where mid like concat('%', #{mid} ,'%') order by idx desc;
+	</select>
+	
+	<select id="getUserIdCheck" resultType="com.spring.javaclassS.vo.UserVO">
+		select * from user where mid = #{mid};
+	</select>
+
+	<insert id="setDbtestInputOk">
+		insert into user values (default, #{vo.mid}, #{vo.name}, #{vo.age}, #{vo.address});
+	</insert>
+
+	<update id="setDbtestUpdateOk">
+		update user set mid=#{vo.mid}, name=#{vo.name}, age=#{vo.age}, address=#{vo.address} where idx = #{vo.idx};
+	</update>
+
+	<!-- 아래 방법은 parameterType을 이용한 방법, 위 방법은 parameterType을 생략하고 vo를 이용한 방법
+	<update id="setDbtestUpdateOk" parameterType="com.spring.javaclassS.vo.UserVO">
+		update user set mid=#{mid}, name=#{name}, age=#{age}, address=#{address} where idx = #{idx};
+	</update>-->
+
+	<delete id="setDbtestDelete">
+		delete from user where idx = #{idx};
+	</delete>
+</mapper>
