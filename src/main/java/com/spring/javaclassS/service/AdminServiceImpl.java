@@ -10,16 +10,39 @@ import com.spring.javaclassS.vo.GuestVO;
 
 @Service
 public class AdminServiceImpl implements AdminService {
+
 	@Autowired
 	AdminDAO adminDAO;
 
 	@Override
-	public int getGuestListTotRecCnt() {
-		return adminDAO.getGuestListTotRecCnt();
+	public int getMemberTotRecCnt(int level) {
+		return adminDAO.getMemberTotRecCnt(level);
 	}
 
 	@Override
-	public ArrayList<GuestVO> getGuestList(int startIndexNo, int pageSize) {
-		return adminDAO.getGuestList(startIndexNo, pageSize);
+	public ArrayList<GuestVO> getMemberList(int startIndexNo, int pageSize, int level) {
+		return adminDAO.getMemberList(startIndexNo, pageSize, level);
+	}
+
+	@Override
+	public int setMemberLevelCheck(int idx, int level) {
+		return adminDAO.setMemberLevelCheck(idx, level);
+	}
+
+	@Override
+	public String setLevelSelectCheck(String idxSelectArray, int levelSelect) {
+		String[] idxSelectArrays = idxSelectArray.split("/");
+		
+		String str = "0";
+		for(String idx : idxSelectArrays) {
+			adminDAO.setMemberLevelCheck(Integer.parseInt(idx), levelSelect);
+			str = "1";
+		}
+		return str;
+	}
+
+	@Override
+	public int setMemberDeleteOk(int idx) {
+		return adminDAO.setMemberDeleteOk(idx);
 	}
 }

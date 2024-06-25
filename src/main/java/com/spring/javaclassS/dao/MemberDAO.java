@@ -23,4 +23,8 @@ public interface MemberDAO {
 	public int setPwdChangeOk(@Param("mid") String mid,  @Param("pwd") String pwd);
 
 	public ArrayList<MemberVO> getMemberList(@Param("level") int level);
+	
+	public int setMemberUpdateOk(@Param("vo") MemberVO vo);
+
+	public int setUserDel(@Param("mid") String mid);
 }

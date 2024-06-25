@@ -5,5 +5,52 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
+	<!-- Interceptor 설정 -->
+	<beans:bean id="level0Interceptor" class="com.spring.javaclassS.interceptor.Level0Interceptor" />
+	<beans:bean id="level1Interceptor" class="com.spring.javaclassS.interceptor.Level1Interceptor" />
+	<beans:bean id="Level2Interceptor" class="com.spring.javaclassS.interceptor.Level2Interceptor" />
+	<beans:bean id="Level3Interceptor" class="com.spring.javaclassS.interceptor.Level3Interceptor" />
 
+	<interceptors>
+		<!-- 준회원 / 비회원 처리 -->
+		<interceptor>
+			<mapping path="/member/**" />
+			<mapping path="/board/boardList" />
+			<exclude-mapping path="/member/memberLogin"/>
+			<exclude-mapping path="/member/memberJoin"/>
+			<exclude-mapping path="/member/memberIdCheck"/>
+			<exclude-mapping path="/member/memberNickCheck"/>
+			<exclude-mapping path="/member/memberNewPassword"/>
+			<exclude-mapping path="/member/memberPwdCheck"/>
+			<exclude-mapping path="/member/memberPwdChangeOk"/>
+			<exclude-mapping path="/member/memberUpdate"/>
+			<exclude-mapping path="/member/memberuserDel"/>
+			<exclude-mapping path="/member/memberLogout"/>
+			<beans:ref bean="Level3Interceptor" />
+		</interceptor>
+		<!-- 정회원 (준회원 : board의 list 보기만 읽기 가능, 그 외 기타 'board/study/pds/dbShop'의 기능은 정회원 이상만 가능) -->
+		<interceptor>
+			<mapping path="/board/**" />
+			<mapping path="/study/**" />
+			<mapping path="/user/**" />
+			<mapping path="/dbShop/**" />
+			<mapping path="/pds/pdsList" />
+			<mapping path="/pds/pdsDownload" />
+			<mapping path="/board/boardList" />
+			<mapping path="/member/memberList" />
+			<beans:ref bean="Level2Interceptor" />
+		</interceptor>
+		<!-- 우수회원 (정회원 : pds에서 list 읽기와 download까지 가능 / 우수회원 : pds 모든 페이지 이용 가능 (upload까지도)) -->
+		<interceptor>
+			<mapping path="/pds/**" />
+			<exclude-mapping path="/pds/pdsList" />
+			<exclude-mapping path="/pds/pdsDownload" />
+			<beans:ref bean="level1Interceptor" />
+		</interceptor>
+		<!-- 관리자 -->
+		<interceptor>
+			<mapping path="/admin/**" />
+			<beans:ref bean="level0Interceptor" />
+		</interceptor>
+	</interceptors>
 </beans:beans>

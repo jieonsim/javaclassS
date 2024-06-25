@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>adminLeft.jsp</title>
-<jsp:include page="/WEB-INF/views/include/bs4.jsp" />
+<%@ include file="/WEB-INF/views/include/bs4.jsp"%>
 </head>
 <body bgcolor="#ccc">
 	<p>
@@ -42,7 +42,7 @@
 				<a href="${ctp}/admin/member/memberList" target="adminContent">회원리스트</a>
 			</div>
 			<div>
-				<a href="${ctp}/admin/complaint/complaintList" target="adminContent">신고리스트</a>
+				<a href="ComplaintList.ad" target="adminContent">신고리스트</a>
 			</div>
 		</div>
 		<hr />

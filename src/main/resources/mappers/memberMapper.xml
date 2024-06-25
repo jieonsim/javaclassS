@@ -14,15 +14,8 @@
 	</select>
 
 
-	<!-- 동적 쿼리에서는 #을 쓰지 않는다. 그냥 변수명만 쓰면 됨
-	<select id="getMemberList" resultType="com.spring.javaclassS.vo.MemberVO">
-	  <if test="level == 0">
-		  select * from member2 order by nickName;
-		</if>
-	  <if test="level != 0">
-			select * from member2 where userInfor = '공개' order by nickName;
-		</if>
-	</select> -->
+	<!-- 동적 쿼리에서는 #을 쓰지 않는다. 그냥 변수명만 쓰면 됨 <select id="getMemberList" resultType="com.spring.javaclassS.vo.MemberVO"> <if test="level == 0"> select * from member2 order by nickName; </if> <if test="level != 
+		0"> select * from member2 where userInfor = '공개' order by nickName; </if> </select> -->
 
 	<select id="getMemberList" resultType="com.spring.javaclassS.vo.MemberVO">
 		select * from member2
@@ -45,5 +38,15 @@
 
 	<update id="setPwdChangeOk">
 		update member2 set pwd = #{pwd} where mid = #{mid};
+	</update>
+	
+	<update id="setMemberUpdateOk">
+		update member2 set
+		nickName=#{vo.nickName},name=#{vo.name},gender=#{vo.gender},birthday=#{vo.birthday},tel=#{vo.tel},address=#{vo.address},email=#{vo.email},homePage=#{vo.homePage},job=#{vo.job},hobby=#{vo.hobby},photo=#{vo.photo},content=#{vo.content},userInfor=#{vo.userInfor}
+		where mid=#{vo.mid};
+	</update>
+
+	<update id="setUserDel">
+		update member2 set userDel = 'OK' where mid = #{mid};
 	</update>
 </mapper>

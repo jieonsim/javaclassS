@@ -55,23 +55,38 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public void fileUpload(MultipartFile fName, MemberVO vo) {
-		String urlPath = "member";
-		
+	public String fileUpload(MultipartFile fName, String mid, String photo) {
+		// 파일이름 중복처리를 위해 UUID객체 활용
 		UUID uid = UUID.randomUUID();
 		String oFileName = fName.getOriginalFilename();
-		String sFileName = vo.getMid() + "_" + uid.toString().substring(0, 8) + "_" + oFileName;
+		String sFileName = mid + "_" + uid.toString().substring(0,8) + "_" + oFileName;
 		
 		try {
-			javaclassProvide.writeFile(fName, sFileName, urlPath);
-			vo.setPhoto(sFileName);
+			// 서버에 파일 올리기
+			javaclassProvide.writeFile(fName, sFileName, "member");
+			
+			// 기존 사진파일이 noimage.jpg가 아니라면 서버에서 삭제시킨다.
+			if(!photo.equals("noimage.jpg")) javaclassProvide.deleteFile(photo, "member");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return sFileName;
 	}
+
 
 	@Override
 	public ArrayList<MemberVO> getMemberList(int level) {
 		return memberDAO.getMemberList(level);
+	}
+
+
+	@Override
+	public int setMemberUpdateOk(MemberVO vo) {
+		return memberDAO.setMemberUpdateOk(vo);
+	}
+
+	@Override
+	public int setUserDel(String mid) {
+		return memberDAO.setUserDel(mid);
 	}
 }

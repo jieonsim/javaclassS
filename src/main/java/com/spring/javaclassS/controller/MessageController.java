@@ -112,6 +112,26 @@ public class MessageController {
 			model.addAttribute("msg",  "파일이 업로드에 실패하였습니다.");
 			model.addAttribute("url", "/study/fileUpload/fileUpload");
 		}
+		else if(msgFlag.equals("adminNo")) {
+			model.addAttribute("msg",  "관리자만 접속하실 수 있습니다.");
+			model.addAttribute("url", "/");
+		}
+		else if(msgFlag.equals("memberNo")) {
+			model.addAttribute("msg",  "회원 로그인 후 사용하실 수 있습니다.");
+			model.addAttribute("url", "/");
+		}
+		else if(msgFlag.equals("memberLevelNo")) {
+			model.addAttribute("msg",  "회원 등급을 확인하세요.");
+			model.addAttribute("url", "/member/memberMain");
+		}
+		else if(msgFlag.equals("boardInputOk")) {
+			model.addAttribute("msg",  "게시판에 글이 등록되었습니다.");
+			model.addAttribute("url", "/board/boardList");
+		}
+		else if(msgFlag.equals("boardInputNo")) {
+			model.addAttribute("msg",  "게시판에 글 등록이 실패하였습니다.");
+			model.addAttribute("url", "/board/boardInput");
+		}
 		
 		return "include/message";
 	}
