@@ -58,11 +58,11 @@ th {
 
 	function idCheck() {
 		let mid = myform.mid.value;
-		
+
 		if (mid.trim() === "") {
 			alert("아이디를 입력하세요.");
 		} else {
-			let url = "${ctp}/dbtest/dbtestWindow?mid="+mid;
+			let url = "${ctp}/dbtest/dbtestWindow?mid=" + mid;
 			window.open(url, "dbtestWindow", "width=600px,height=300px");
 		}
 	}
@@ -136,8 +136,7 @@ th {
 					<td>${vo.age}</td>
 					<td>${vo.address}</td>
 					<td>
-						<a href="javascript:deleteCheck(${vo.idx})" class="badge badge-danger">삭제</a>
-						<a href="javascript:updateCheck(${vo.idx})" id="updateBtn${vo.idx}" class="badge badge-info">수정</a>
+						<a href="javascript:deleteCheck(${vo.idx})" class="badge badge-danger">삭제</a> <a href="javascript:updateCheck(${vo.idx})" id="updateBtn${vo.idx}" class="badge badge-info">수정</a>
 					</td>
 				</tr>
 				<tr class="userRow" id="row${vo.idx}" style="display: none">
