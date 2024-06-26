@@ -134,7 +134,7 @@
 		<br />
 		<!-- 검색기 시작 -->
 		<div class="container text-center">
-			<form name="searchForm" method="post" action="BoardSearchList.bo">
+			<form name="searchForm" method="post" action="boardSearch">
 				<b>검색 : </b>
 				<select name="search" id="search">
 					<option value="title">글제목</option>
@@ -143,6 +143,8 @@
 				</select>
 				<input type="text" name="searchString" id="searchString" required />
 				<input type="submit" value="검색" class="btn btn-secondary btn-sm" />
+				<input type="hidden" name="pag" value="${pageVO.pag}" />
+				<input type="hidden" name="pageSize" value="${pageVO.pageSize}" />
 			</form>
 		</div>
 		<!-- 검색기 끝 -->

@@ -32,7 +32,7 @@
 			<i class="fa fa-bars"></i>
 		</a>
 		<%-- <a href="${ctp}/" class="w3-bar-item w3-button w3-padding-large">HOME</a> --%>
-		<a href="http://192.168.50.20:9090/javaclassS/" class="w3-bar-item w3-button w3-padding-large">HOME</a>
+		<a href="http://192.168.50.61:9090/javaclassS/" class="w3-bar-item w3-button w3-padding-large">HOME</a>
 		<a href="${ctp}/guest/guestList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Guest</a>
 		<c:if test="${!empty sLevel}">
 			<a href="${ctp}/board/boardList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Board</a>

@@ -7,6 +7,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>boardUpdate.jsp</title>
+<script src="${ctp}/ckeditor/ckeditor.js"></script>
 <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
 </head>
 <body>
@@ -17,7 +18,7 @@
 	</p>
 	<div class="container">
 		<h2 class="text-center">게 시 판 글 수 정 하 기</h2>
-		<form name="myform" method="post" action="BoardUpdateOk.bo">
+		<form name="myform" id="boardUpdateForm" method="post">
 			<table class="table table-bordered">
 				<tr>
 					<th>글쓴이</th>
@@ -34,7 +35,7 @@
 				<tr>
 					<th>글내용</th>
 					<td>
-						<textarea name="content" id="content" rows="6" class="form-control" required>${vo.content}</textarea>
+						<textarea name="content" id="CKEDITOR" rows="6" class="form-control" required>${vo.content}</textarea>
 					</td>
 				</tr>
 				<tr>
@@ -50,7 +51,7 @@
 					<td colspan="2" class="text-center">
 						<input type="submit" value="수정하기" class="btn btn-success mr-2" />
 						<input type="reset" value="다시입력" class="btn btn-warning mr-2" />
-						<input type="button" value="돌아가기" onclick="location.href='BoardContent.bo?idx=${vo.idx}&pag=${pag}&pageSize=${pageSize}';" class="btn btn-info" />
+						<input type="button" value="돌아가기" onclick="location.href='boardContent?idx=${vo.idx}&pag=${pag}&pageSize=${pageSize}';" class="btn btn-info" />
 					</td>
 				</tr>
 			</table>
@@ -66,4 +67,33 @@
 	</p>
 	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
 </body>
+<script>
+	CKEDITOR.replace("content", {
+		height : 480,
+		filebrowserUploadUrl : "${ctp}/imageUpload", /*파일(이미지)를 업로드시키기 위한 매핑 경로(메소드)*/
+		uploadUrl : "${ctp}/imageUpload" /*여러개의 그림 파일을 드래그 앤 드랍해서 올릴 수 있다.*/
+	});
+
+	$(document).ready(function() {
+		$('#boardUpdateForm').on('submit', function(event) {
+			event.preventDefault();
+			var formData = $(this).serialize();
+
+			$.ajax({
+				type : 'POST',
+				url : '${ctp}/board/boardUpdate',
+				data : formData,
+				success : function(response) {
+					alert(response.msg);
+					if (response.url) {
+						window.location.href = '${ctp}' + response.url;
+					}
+				},
+				error : function(xhr, status, error) {
+					alert('게시글 수정 중 오류가 발생했습니다.');
+				}
+			});
+		});
+	});
+</script>
 </html>
