@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.javaclassS.service.DbtestService;
 import com.spring.javaclassS.service.StudyService;
@@ -180,7 +181,8 @@ public class StudyController {
 
 		model.addAttribute("year", year);
 		model.addAttribute("police", police);
-		model.addAttribute("totalCnt", analyzeVo.getTotMurder() + analyzeVo.getTotRobbery() + analyzeVo.getTotTheft() + analyzeVo.getTotViolence());
+		model.addAttribute("totalCnt", analyzeVo.getTotMurder() + analyzeVo.getTotRobbery()
+				+ analyzeVo.getTotTheft() + analyzeVo.getTotViolence());
 
 		return "study/restapi/restapiTest4";
 	}
@@ -219,13 +221,16 @@ public class StudyController {
 		// inline 그림 보내기
 		// request.getSession().getServletContext().getRealPath("/resources/images/login.jpg");
 		// 본문에 기재될 그림파일의 경로를 별도로 표시시켜준다. 그런 후 다시 보관함에 저장한다.
-		FileSystemResource inlineImage = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/login.jpg"));
+		FileSystemResource inlineImage = new FileSystemResource(
+				request.getSession().getServletContext().getRealPath("/resources/images/login.jpg"));
 		messageHelper.addInline("loginImage", inlineImage);
 
 		// 첨부파일 보내기
-		FileSystemResource attachmentFile = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/chicago.jpg"));
+		FileSystemResource attachmentFile = new FileSystemResource(
+				request.getSession().getServletContext().getRealPath("/resources/images/chicago.jpg"));
 		messageHelper.addAttachment("chicago.jpg", attachmentFile);
-		attachmentFile = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/sanfran.zip"));
+		attachmentFile = new FileSystemResource(
+				request.getSession().getServletContext().getRealPath("/resources/images/sanfran.zip"));
 		messageHelper.addAttachment("sanfran.zip", attachmentFile);
 
 		// 메일 전송하기
@@ -297,4 +302,43 @@ public class StudyController {
 
 		return res;
 	}
+
+	@RequestMapping(value = "/fileUpload/multiFile", method = RequestMethod.GET)
+	public String multiFileGet() {
+
+		return "study/fileUpload/multiFile";
+	}
+
+	// 여러개 업로드 시 MultipartHttpServletRequest 사용
+	@RequestMapping(value = "/fileUpload/multiFile", method = RequestMethod.POST)
+	public String multiFilePost(MultipartHttpServletRequest mFile) {
+
+		int res = studyService.multiFileUpload(mFile);
+
+		if (res != 0) {
+			return "redirect:/message/multiFileUploadOk";
+		} else {
+			return "redirect:/message/multiFileUploadNo";
+		}
+	}
+
+	@RequestMapping(value = "/fileUpload/multiFile2", method = RequestMethod.GET)
+	public String multiFile2Get() {
+
+		return "study/fileUpload/multiFile2";
+	}
+
+	@RequestMapping(value = "/fileUpload/multiFile2", method = RequestMethod.POST)
+	public String multiFile2Post(MultipartHttpServletRequest mFile, HttpServletRequest request, String imgNames) {
+		//String[] imgNames = request.getParameter("imgNames").split("/");
+		
+		int res = studyService.multiFileUpload(mFile);
+
+		if (res != 0) {
+			return "redirect:/message/multiFileUploadOk";
+		} else {
+			return "redirect:/message/multiFileUploadNo";
+		}
+	}
+
 }

@@ -99,7 +99,8 @@
 			<p>
 				<input type="button" value="파일업로드" onclick="fCheck()" class="btn btn-success" />
 				<input type="reset" value="다시선택" class="btn btn-warning" />
-				<input type="button" value="멀티파일업로드로이동" onclick="location.href='multiFile';" class="btn btn-primary" />
+				<input type="button" value="멀티파일업로드로이동" onclick="location.href='${ctp}/study/fileUpload/multiFile';" class="btn btn-primary" />
+				<input type="button" value="그림파일업로드로이동" onclick="location.href='${ctp}/study/fileUpload/multiFile2';" class="btn btn-primary" />
 			</p>
 		</form>
 		<hr />

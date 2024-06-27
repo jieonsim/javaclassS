@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.javaclassS.vo.CrimeVO;
 import com.spring.javaclassS.vo.MemberVO;
@@ -37,5 +38,7 @@ public interface StudyService {
 	public List<MemberVO> getMemberDetails();
 
 	public int fileUpload(MultipartFile fName, String mid);
+
+	public int multiFileUpload(MultipartHttpServletRequest mFile);
 
 }

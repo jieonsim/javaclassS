@@ -119,7 +119,19 @@ public class MessageController {
 			model.addAttribute("msg", "게시글 삭제 실패");
 			model.addAttribute("url",
 					"/board/boardContent?idx=" + idx + "&pag=" + pag + "&pageSize=" + pageSize);
-		} 
+		} else if (msgFlag.equals("multiFileUploadOk")) {
+			model.addAttribute("msg", "파일 업로드 성공");
+			model.addAttribute("url", "/study/fileUpload/fileUpload");
+		} else if (msgFlag.equals("multiFileUploadNo")) {
+			model.addAttribute("msg", "파일 업로드 실패");
+			model.addAttribute("url", "/study/fileUpload/multiFile");
+		} else if (msgFlag.equals("pdsUploadOk")) {
+			model.addAttribute("msg", "파일 업로드 성공");
+			model.addAttribute("url", "/pds/pdsList");
+		} else if (msgFlag.equals("pdsUploadNo")) {
+			model.addAttribute("msg", "파일 업로드 실패");
+			model.addAttribute("url", "/pds/pdsInput");
+		}
 
 		return "include/message";
 	}
