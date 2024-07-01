@@ -29,4 +29,8 @@ public interface MemberService {
 	public int setMemberUpdateOk(MemberVO vo);
 
 	public int setUserDel(String mid);
+
+	public MemberVO getMemberNickNameEmailCheck(String nickName, String email);
+
+	public void setKaKaoMemberInput(String mid, String pwd, String nickName, String email);
 }

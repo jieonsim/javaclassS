@@ -17,6 +17,7 @@
 			<mapping path="/member/**" />
 			<mapping path="/board/boardList" />
 			<exclude-mapping path="/member/memberLogin"/>
+			<exclude-mapping path="/member/kakaoLogin"/>
 			<exclude-mapping path="/member/memberJoin"/>
 			<exclude-mapping path="/member/memberIdCheck"/>
 			<exclude-mapping path="/member/memberNickCheck"/>
@@ -26,6 +27,7 @@
 			<exclude-mapping path="/member/memberUpdate"/>
 			<exclude-mapping path="/member/memberuserDel"/>
 			<exclude-mapping path="/member/memberLogout"/>
+			<exclude-mapping path="/member/kakaoLogout"/>
 			<beans:ref bean="Level3Interceptor" />
 		</interceptor>
 		<!-- 정회원 (준회원 : board의 list 보기만 읽기 가능, 그 외 기타 'board/study/pds/dbShop'의 기능은 정회원 이상만 가능) -->

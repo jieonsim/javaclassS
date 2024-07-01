@@ -1,6 +1,7 @@
 package com.spring.javaclassS.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -40,7 +42,8 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/imageUpload")
-	public void imageUploadGet(MultipartFile upload, HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void imageUploadGet(MultipartFile upload, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
 		response.setCharacterEncoding("utf-8");
 		response.setContentType("text/html; charset=utf-8");
 
@@ -58,9 +61,39 @@ public class HomeController {
 
 		PrintWriter out = response.getWriter();
 		String fileUrl = request.getContextPath() + "/data/ckeditor/" + oFileName;
-		out.println("{\"originalFilename\":\"" + oFileName + "\",\"uploaded\":1,\"url\":\"" + fileUrl + "\"}");
+		out.println(
+				"{\"originalFilename\":\"" + oFileName + "\",\"uploaded\":1,\"url\":\"" + fileUrl + "\"}");
 
 		out.flush();
 		fos.close();
+	}
+
+	@RequestMapping(value="/fileDownAction", method=RequestMethod.GET)
+	public void fileDownActionGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String path = request.getParameter("path");
+		String file = request.getParameter("file");
+		
+		if(path.equals("pds")) path += "/temp/";
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/" + path) + file;;
+		
+		File downFile = new File(realPath);
+		String downFileName = new String(file.getBytes("UTF-8"), "8859_1");
+		response.setHeader("Content-Disposition", "attachment;filename="+ downFileName);
+		// "Content-Disposition", "attachment;filename=" : 예약어
+		
+		FileInputStream fis = new FileInputStream(downFile);
+		ServletOutputStream sos = response.getOutputStream();
+		
+		byte[] bytes = new byte[2048];
+		int data;
+		while((data = fis.read(bytes, 0, bytes.length)) != -1) {
+			sos.write(bytes, 0, data);
+		}
+		sos.flush();
+		sos.close();
+		fis.close();
+		
+		// 다운로드 완료 후에 서버에 저장된 zip 파일을 삭제 처리한다.
+		downFile.delete();
 	}
 }

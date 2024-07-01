@@ -1,5 +1,7 @@
 package com.spring.javaclassS.controller;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -26,6 +28,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.javaclassS.common.JavaclassProvide;
 import com.spring.javaclassS.service.MemberService;
 import com.spring.javaclassS.vo.MemberVO;
 
@@ -41,6 +44,10 @@ public class MemberController {
 	@Autowired
 	JavaMailSender mailSender;
 
+	@Autowired
+	JavaclassProvide javaclassProvide;
+
+	// 일반 로그인
 	@RequestMapping(value = "/memberLogin", method = RequestMethod.GET)
 	public String memberLoginGet(HttpServletRequest request) {
 		// 로그인창에 아이디 체크 유무에 대한 처리
@@ -62,11 +69,89 @@ public class MemberController {
 		return "member/memberLogin";
 	}
 
-	// Controller에서 초기값 정도는 처리하기, 그 외 비지니스로직은 서비스 객체에서 처리하기
+	// 카카오 로그인
+	@RequestMapping(value = "/kakaoLogin", method = RequestMethod.GET)
+	public String kakaoLoginGet(String nickName, String email, String accessToken, HttpServletRequest request,
+			HttpSession session) throws MessagingException {
+
+		// 카카오 로그아웃을 위한 카카오 앱 키를 세션에 저장시켜둔다.
+		session.setAttribute("sAccessToken", accessToken);
+
+		// 카카오 로그인한 회원인 경우에는 우리 회원인지를 조사한다.
+		// (넘어온 이메일을 @를 기준으로 아이디와 분리해서 기존 member2 테이블의 아이디와 비교한다.)
+		MemberVO vo = memberService.getMemberNickNameEmailCheck(nickName, email);
+
+		// 현재 카카오 로그인에 의한 우리 회원이 아니라면 자동으로 우리회원에 가입 처리한다.
+		// 필수 입력 : 아이디 , 닉네임 , 이메일, 성명(닉네임으로 대체)
+		String newMember = "NO"; // 신규 회원인지에 대한 정의(신규회원: OK, 기존회원 : NO)
+		if (vo == null) {
+			// 아이디 결정하기
+			String mid = email.substring(0, email.indexOf("@"));
+			// 만약에 기존에 같은 아이디가 존재한다면 가입 처리 불가
+			MemberVO vo2 = memberService.getMemberIdCheck(mid);
+			if (vo2 != null)
+				return "redirect:/message/midSameSearch";
+
+			// 비밀번호(임시 비밀번호 발급 처리)
+			UUID uid = UUID.randomUUID();
+			String pwd = uid.toString().substring(0, 8);
+			session.setAttribute("sImsiPwd", pwd);
+
+			// 새로 발급된 비밀번호를 암호화 시켜서 db에 저장처리한다. (카카오 로그인한 신규 회원은 바로 정회원으로 등업 시켜준다.)
+			memberService.setKaKaoMemberInput(mid, passwordEncoder.encode(pwd), nickName, email);
+
+			// 새로 발급 받은 임시 비밀번호를 메일로 전송한다.
+			javaclassProvide.mailSend(email, "임시 비밀번호를 발급하였습니다.", pwd);
+
+			// 새로 가입 처리된 회원의 정보를 다시 vo에 담아준다.
+			vo = memberService.getMemberIdCheck(mid);
+
+			// 비밀번호를 새로 발급 처리 했을 때 sLogin 세션을 발생시켜주고 memberMain 창에 비밀번호 변경 메시지를 지속적으로 뿌려준다.
+			session.setAttribute("sLogin", "OK");
+
+			newMember = "OK";
+		}
+
+		// 로그인 인증 완료 시 처리할 부분(세션, 쿠키, 기타 설정값)
+		// 1. 세션 처리
+		String strLevel = "";
+		if (vo.getLevel() == 0) {
+			strLevel = "관리자";
+		} else if (vo.getLevel() == 1) {
+			strLevel = "우수회원";
+		} else if (vo.getLevel() == 2) {
+			strLevel = "정회원";
+		} else if (vo.getLevel() == 3) {
+			strLevel = "준회원";
+		}
+
+		session.setAttribute("sMid", vo.getMid());
+		session.setAttribute("sNickName", vo.getNickName());
+		session.setAttribute("sLevel", vo.getLevel());
+		session.setAttribute("strLevel", strLevel);
+
+		// 3. 기타 처리 (DB에 처리해야할 것들(방문카운트, 포인트 등)
+		// 숙제 방문포인트 : 1회 방문 시 point 10점 할당, 1일 최대 50점까지 할당 가능
+		int point = 10;
+
+		// 방문카운트
+		memberService.setMemberInforUpdate(vo.getMid(), point);
+
+		// 카카오 로그인 완료 후 모든 처리가 끝나면 필요한 메시지 처리 후 memberMain으로 보낸다.
+		if (newMember.equals("NO")) { // 기존회원일 경우
+			return "redirect:/message/memberLoginOk?mid=" + vo.getMid();
+		} else {
+			return "redirect:/message/memberLoginNewOk?mid=" + vo.getMid();
+		}
+	}
+
+	// 일반 로그인 처리하기 / Controller에서 초기값 정도는 처리하기, 그 외 비지니스로직은 서비스 객체에서 처리하기
 	@RequestMapping(value = "/memberLogin", method = RequestMethod.POST)
-	public String memberLoginPost(HttpServletRequest request, HttpServletResponse response, HttpSession session,
+	public String memberLoginPost(HttpServletRequest request, HttpServletResponse response,
+			HttpSession session,
 			// name으로 받은 변수는 view에서 받은 거, 뒤에 변수는 controller에서 사용할 변수
-			@RequestParam(name = "mid", defaultValue = "hkd1234", required = false) String mid, @RequestParam(name = "pwd", defaultValue = "1234", required = false) String pwd,
+			@RequestParam(name = "mid", defaultValue = "hkd1234", required = false) String mid,
+			@RequestParam(name = "pwd", defaultValue = "1234", required = false) String pwd,
 			@RequestParam(name = "idSave", defaultValue = "1234", required = false) String idSave) {
 
 		// 로그인 인증처리(spring security의 BCryptPasswordEncoder 객체를 이용한 암호화된 비밀번호 비교하기)
@@ -126,12 +211,36 @@ public class MemberController {
 		}
 	}
 
+	// 일반 로그아웃
 	@RequestMapping(value = "/memberLogout", method = RequestMethod.GET)
 	public String memberLogout(HttpSession session) {
 		String mid = (String) session.getAttribute("sMid");
 		session.invalidate();
 
 		return "redirect:/message/memberLogout?mid=" + mid;
+	}
+
+	// 카카오 로그아웃
+	@RequestMapping(value = "/kakaoLogout", method = RequestMethod.GET)
+	public String kakaoLogout(HttpSession session) {
+		String mid = (String) session.getAttribute("sMid");
+		String accessToken = (String) session.getAttribute("sAccessToken");
+		String reqURL = "https://kapi.kakao.com/v1/user/unlink";
+		try {
+			URL url = new URL(reqURL);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("POST");
+			// key값인 Authorizationr은 예약어임 / value는 앞에서 넘어온 토큰값이며, 앞에 공백 하나가 있어야함
+			conn.setRequestProperty("Authorization", " " + accessToken);
+			
+			// 카카오에서 정상적으로 처리되었다면 200번이 들어온다.
+			int responseCode = conn.getResponseCode();
+			System.out.println("responseCode : " + responseCode);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		session.invalidate();
+		return "redirect:/message/kakaoLogout?mid=" + mid;
 	}
 
 	@RequestMapping(value = "/memberMain", method = RequestMethod.GET)
@@ -219,7 +328,8 @@ public class MemberController {
 
 	@ResponseBody
 	@RequestMapping(value = "/memberNewPassword", method = RequestMethod.POST)
-	public String memberNewPasswordPost(String mid, String email, HttpSession session) throws MessagingException {
+	public String memberNewPasswordPost(String mid, String email, HttpSession session)
+			throws MessagingException {
 		MemberVO vo = memberService.getMemberIdCheck(mid);
 
 		if (vo != null && vo.getEmail().equals(email)) {
@@ -249,7 +359,8 @@ public class MemberController {
 
 	// 메일 전송하기(아이디 찾기, 비밀번호 찾기)
 	private String mailSend(String toMail, String title, String mailFlag) throws MessagingException {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+				.currentRequestAttributes()).getRequest();
 		String content = "";
 
 		// 메일 전송을 위한 객체 : MimeMessage(), MimeMessageHelper()
@@ -272,7 +383,8 @@ public class MemberController {
 		// inline 그림 보내기
 		// request.getSession().getServletContext().getRealPath("/resources/images/login.jpg");
 		// 본문에 기재될 그림파일의 경로를 별도로 표시시켜준다. 그런 후 다시 보관함에 저장한다.
-		FileSystemResource inlineImage = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/login.jpg"));
+		FileSystemResource inlineImage = new FileSystemResource(
+				request.getSession().getServletContext().getRealPath("/resources/images/login.jpg"));
 		messageHelper.addInline("loginImage", inlineImage);
 
 		// 메일 전송하기
@@ -297,7 +409,7 @@ public class MemberController {
 		}
 		return "0";
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/memberPwdChangeOk", method = RequestMethod.POST)
 	public String memberPwdChangeOkPost(String mid, String pwd) {
@@ -325,7 +437,8 @@ public class MemberController {
 	public String memberUpdatePost(MemberVO vo, MultipartFile fName, HttpSession session) {
 		// 닉네임 체크
 		String nickName = (String) session.getAttribute("sNickName");
-		if (memberService.getMemberNickCheck(vo.getNickName()) != null && !nickName.equals(vo.getNickName())) {
+		if (memberService.getMemberNickCheck(vo.getNickName()) != null
+				&& !nickName.equals(vo.getNickName())) {
 			return "redirect:/message/nickCheckNo";
 		}
 

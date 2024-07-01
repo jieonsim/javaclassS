@@ -15,7 +15,7 @@ import com.spring.javaclassS.vo.MemberVO;
 public class MemberServiceImpl implements MemberService {
 	@Autowired
 	MemberDAO memberDAO;
-	
+
 	@Autowired
 	JavaclassProvide javaclassProvide;
 
@@ -59,26 +59,25 @@ public class MemberServiceImpl implements MemberService {
 		// 파일이름 중복처리를 위해 UUID객체 활용
 		UUID uid = UUID.randomUUID();
 		String oFileName = fName.getOriginalFilename();
-		String sFileName = mid + "_" + uid.toString().substring(0,8) + "_" + oFileName;
-		
+		String sFileName = mid + "_" + uid.toString().substring(0, 8) + "_" + oFileName;
+
 		try {
 			// 서버에 파일 올리기
 			javaclassProvide.writeFile(fName, sFileName, "member");
-			
+
 			// 기존 사진파일이 noimage.jpg가 아니라면 서버에서 삭제시킨다.
-			if(!photo.equals("noimage.jpg")) javaclassProvide.deleteFile(photo, "member");
+			if (!photo.equals("noimage.jpg"))
+				javaclassProvide.deleteFile(photo, "member");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return sFileName;
 	}
 
-
 	@Override
 	public ArrayList<MemberVO> getMemberList(int level) {
 		return memberDAO.getMemberList(level);
 	}
-
 
 	@Override
 	public int setMemberUpdateOk(MemberVO vo) {
@@ -88,5 +87,15 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int setUserDel(String mid) {
 		return memberDAO.setUserDel(mid);
+	}
+
+	@Override
+	public MemberVO getMemberNickNameEmailCheck(String nickName, String email) {
+		return memberDAO.getMemberNickNameEmailCheck(nickName, email);
+	}
+
+	@Override
+	public void setKaKaoMemberInput(String mid, String pwd, String nickName, String email) {
+		memberDAO.setKaKaoMemberInput(mid, pwd, nickName, email);
 	}
 }

@@ -10,6 +10,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>memberMain.jsp</title>
 <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
+<!-- <script src="https://developers.kakao.com/sdk/js/kakao.js"></script> -->
 <script>
 	'use strict';
 

@@ -13,7 +13,6 @@
 		select * from member2 where name = #{name} and email = #{email}
 	</select>
 
-
 	<!-- 동적 쿼리에서는 #을 쓰지 않는다. 그냥 변수명만 쓰면 됨 <select id="getMemberList" resultType="com.spring.javaclassS.vo.MemberVO"> <if test="level == 0"> select * from member2 order by nickName; </if> <if test="level != 
 		0"> select * from member2 where userInfor = '공개' order by nickName; </if> </select> -->
 
@@ -23,9 +22,19 @@
 		order by nickName
 	</select>
 
+	<select id="getMemberNickNameEmailCheck" resultType="com.spring.javaclassS.vo.MemberVO">
+		select * from member2 where nickName = #{nickName} and email = #{email} limit 1
+		<!-- 정상적이라면 limit 쓸 필요없음 -->
+	</select>
+
 	<insert id="setMemberJoinOk">
 		insert into member2 values
 		(default,#{vo.mid},#{vo.pwd},#{vo.nickName},#{vo.name},#{vo.gender},#{vo.birthday},#{vo.tel},#{vo.address},#{vo.email},#{vo.homePage},#{vo.job},#{vo.hobby},#{vo.photo},#{vo.content},#{vo.userInfor},default,default,default,default,default,default,default);
+	</insert>
+
+	<!-- name은 수집된 nickname으로 처리 -->
+	<insert id="setKaKaoMemberInput">
+		insert into member2 (mid, pwd, nickName, email, name, level) values (#{mid}, #{pwd}, #{nickName}, #{email}, #{nickName}, 2)
 	</insert>
 
 	<update id="setMemberPasswordUpdate">
@@ -39,7 +48,7 @@
 	<update id="setPwdChangeOk">
 		update member2 set pwd = #{pwd} where mid = #{mid};
 	</update>
-	
+
 	<update id="setMemberUpdateOk">
 		update member2 set
 		nickName=#{vo.nickName},name=#{vo.name},gender=#{vo.gender},birthday=#{vo.birthday},tel=#{vo.tel},address=#{vo.address},email=#{vo.email},homePage=#{vo.homePage},job=#{vo.job},hobby=#{vo.hobby},photo=#{vo.photo},content=#{vo.content},userInfor=#{vo.userInfor}

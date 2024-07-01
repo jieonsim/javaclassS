@@ -35,8 +35,31 @@ if (cookies != null) {
 	height: 3rem;
 }
 </style>
+<!-- 카카오 로그인을 위해 아래 js 파일 추가 필요 -->
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script>
 	'use strict';
+	
+ 	// 카카오 로그인(자바스크립트 앱키 등록) / 예약어이니 틀리면 안됨
+	window.Kakao.init("72fa02985e6ba64cf44f44ded5806dd8");
+	
+    function kakaoLogin() {
+    	// 카카오에 인증요청처리를 한다.
+    	window.Kakao.Auth.login({
+    		scope: 'profile_nickname, account_email',
+    		success:function(autoObj) {
+    			console.log(Kakao.Auth.getAccessToken(), "정상 토큰발급됨");
+    			window.Kakao.API.request({
+    				url : '/v2/user/me',
+    				success:function(res) {
+    					const kakao_account = res.kakao_account;
+    					console.log(kakao_account);
+    					location.href = "${ctp}/member/kakaoLogin?nickName="+kakao_account.profile.nickname+"&email="+kakao_account.email+"&accessToken="+Kakao.Auth.getAccessToken();
+    				}
+    			});
+    		}
+    	});
+    }
 
 	$(function() {
 		$("#searchPassword").hide();
@@ -160,6 +183,7 @@ if (cookies != null) {
 						<input type="submit" value="로그인" class="btn btn-success mr-2" />
 						<input type="reset" value="다시입력" class="btn btn-warning mr-2" />
 						<input type="button" value="회원가입" onclick="location.href='${ctp}/member/memberJoin';" class="btn btn-primary mr-4" />
+						<a href="javascript:kakaoLogin()"><img alt="카카오로그인" src="${ctp}/images/kakao_login_medium_narrow.png" width="150px;"></a>
 					</td>
 				</tr>
 			</table>
