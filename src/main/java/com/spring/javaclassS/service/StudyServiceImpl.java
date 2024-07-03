@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -255,4 +256,26 @@ public class StudyServiceImpl implements StudyService {
 		return res;
 	}
 
+	@Override
+	public Map<String, Integer> analyzer(String content) {
+		int wordFrequenciesToReturn = 10;
+		int minWordLength = 2;
+
+		Map<String, Integer> frequencyMap = new HashMap<>();
+
+		// 공백을 정규식으로 처리 s하나만 하면 문자로 읽기 때문에 역슬래시 두개 추가 및 여러개올 수 있으니 + 추가
+		String[] words = content.split("\\s+");
+
+		for (String word : words) {
+			if (word.length() >= minWordLength) {
+				word = word.toLowerCase();
+				frequencyMap.put(word, frequencyMap.getOrDefault(word, 0) + 1);
+			}
+		}
+
+		return frequencyMap.entrySet().stream().sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
+				.limit(wordFrequenciesToReturn)
+				.collect(HashMap::new, (m, e) -> m.put(e.getKey(), e.getValue()), HashMap::putAll);
+
+	}
 }

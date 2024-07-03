@@ -61,9 +61,12 @@
 					<a href="${ctp}/dbtest/dbtestList" class="w3-bar-item w3-button">DB Test</a>
 					<a href="${ctp}/study/ajax/ajaxForm" class="w3-bar-item w3-button">Ajax Test</a>
 					<a href="${ctp}/study/restapi/restapi" class="w3-bar-item w3-button">REST API</a>
-					<a href="${ctp}/password/password" class="w3-bar-item w3-button">암호화</a>
+					<a href="${ctp}/study/password/password" class="w3-bar-item w3-button">암호화</a>
 					<a href="${ctp}/study/mail/mailForm" class="w3-bar-item w3-button">메일연습</a>
 					<a href="${ctp}/study/fileUpload/fileUpload" class="w3-bar-item w3-button">파일업로드연습</a>
+					<a href="${ctp}/study/crawling/jsoup" class="w3-bar-item w3-button">크롤링(jsoup)</a>
+					<a href="${ctp}/study/crawling/selenium" class="w3-bar-item w3-button">크롤링(selenium)</a>
+					<a href="${ctp}/study/wordcloud/wordcloudForm" class="w3-bar-item w3-button">WordCloud</a>
 				</div>
 			</div>
 			<div class="w3-dropdown-hover w3-hide-small">

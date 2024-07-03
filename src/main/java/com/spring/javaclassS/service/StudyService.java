@@ -3,6 +3,7 @@ package com.spring.javaclassS.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -40,5 +41,7 @@ public interface StudyService {
 	public int fileUpload(MultipartFile fName, String mid);
 
 	public int multiFileUpload(MultipartHttpServletRequest mFile);
+
+	public Map<String, Integer> analyzer(String content);
 
 }

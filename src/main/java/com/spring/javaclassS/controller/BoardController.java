@@ -203,36 +203,35 @@ public class BoardController {
 
 		if (res != 0) {
 			response.setMsg("게시글이 수정되었습니다.");
-			response.setUrl(
-					"/board/boardContent?idx=" + vo.getIdx() + "&pag=" + pag + "&pageSize=" + pageSize);
+			response.setUrl("/board/boardContent?idx=" + vo.getIdx() + "&pag=" + pag + "&pageSize=" + pageSize);
 		} else {
 			response.setMsg("게시글이 수정에 실패하였습니다.");
-			response.setUrl(
-					"/board/boardUpdate?idx=" + vo.getIdx() + "&pag=" + pag + "&pageSize=" + pageSize);
+			response.setUrl("/board/boardUpdate?idx=" + vo.getIdx() + "&pag=" + pag + "&pageSize=" + pageSize);
 		}
 
 		return response;
 	}
 
-//	@RequestMapping(value = "/boardDelete", method = RequestMethod.GET)
-//	public String boardDeleteGet(int idx,
-//			@RequestParam(name = "pag", defaultValue = "1", required = false) int pag,
-//			@RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize) {
-//		// 게시글에 사진이 존재한다면 서버에 저장된 사진을 삭제처리한다.
-//		BoardVO vo = boardService.getBoardContent(idx);
-//		if (vo.getContent().indexOf("src=\"/") != -1) {
-//			boardService.imgDelete(vo.getContent());
-//		}
-//
-//		// 사진 작업이 끝나면 DB에 저장된 실제 정보 레코드를 삭제처리한다.
-//		int res = boardService.setBoardDelete(idx);
-//
-//		if (res != 0) {
-//			return "redirect:/message/boardDeleteOk";
-//		} else {
-//			return "redirect:/message/boardDeleteNo?idx=" + idx + "&pag=" + pag + "&pageSize=" + pageSize;
-//		}
-//	}
+	@RequestMapping(value = "/boardDelete", method = RequestMethod.GET)
+	public String boardDeleteGet(int idx,
+			@RequestParam(name = "pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize) {
+		// 게시글에 사진이 존재한다면 서버에 저장된 사진을 삭제처리한다.
+		BoardVO vo = boardService.getBoardContent(idx);
+		if (vo.getContent().indexOf("src=\"/") != -1) {
+			boardService.imgDelete(vo.getContent());
+		}
+
+		// 사진 작업이 끝나면 DB에 저장된 실제 정보 레코드를 삭제처리한다.
+		int res = boardService.setBoardDelete(idx);
+
+		if (res != 0) {
+			return "redirect:/message/boardDeleteOk";
+		} else {
+			return "redirect:/message/boardDeleteNo?idx=" + idx + "&pag=" + pag + "&pageSize=" + pageSize;
+		}
+	}
+	
 //    @RequestMapping(value = "/boardDelete", method = RequestMethod.GET)
 //    @ResponseBody
 //    public Map<String, String> boardDeleteGet(int idx,
@@ -257,26 +256,27 @@ public class BoardController {
 //
 //        return result;
 //    }
-	@RequestMapping(value = "/boardDelete", method = RequestMethod.GET)
-	@ResponseBody
-	public ResponseVO boardDeleteGet(int idx,
-			@RequestParam(name = "pag", defaultValue = "1", required = false) int pag,
-			@RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize) {
-		ResponseVO response = new ResponseVO();
-
-		// 실제 삭제 로직
-		int res = boardService.setBoardDelete(idx);
-
-		if (res != 0) {
-			response.setMsg("게시글이 삭제되었습니다.");
-			response.setUrl("/board/boardList");
-		} else {
-			response.setMsg("게시글 삭제 실패");
-			response.setUrl("/board/boardContent?idx=" + idx + "&pag=" + pag + "&pageSize=" + pageSize);
-		}
-
-		return response;
-	}
+	
+//	@RequestMapping(value = "/boardDelete", method = RequestMethod.GET)
+//	@ResponseBody
+//	public ResponseVO boardDeleteGet(int idx,
+//			@RequestParam(name = "pag", defaultValue = "1", required = false) int pag,
+//			@RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize) {
+//		ResponseVO response = new ResponseVO();
+//
+//		// 실제 삭제 로직
+//		int res = boardService.setBoardDelete(idx);
+//
+//		if (res != 0) {
+//			response.setMsg("게시글이 삭제되었습니다.");
+//			response.setUrl("/board/boardList");
+//		} else {
+//			response.setMsg("게시글 삭제 실패");
+//			response.setUrl("/board/boardContent?idx=" + idx + "&pag=" + pag + "&pageSize=" + pageSize);
+//		}
+//
+//		return response;
+//	}
 
 	// 부모 댓글 입력 처리(원본 글에 대한 댓글)
 	@ResponseBody
