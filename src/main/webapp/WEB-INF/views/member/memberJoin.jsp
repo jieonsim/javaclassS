@@ -197,6 +197,95 @@
     		reader.readAsDataURL(e.files[0]);
     	}
     }
+    
+    // 이메일 인증번호 받기
+    function emailCertification() {
+    	let mid = myform.mid.value.trim();
+    	let pwd = myform.pwd.value;
+    	let nickName = myform.nickName.value;
+    	let name = myform.name.value;
+    	let email1 = myform.email1.value.trim();
+    	let email2 = myform.email2.value;
+    	let email = email1 + "@" + email2;
+    	
+    	if(!regMid.test(mid)) {
+    		alert("아이디는 4~20자리의 영문 소/대문자와 숫자, 언더바(_)만 사용가능합니다.");
+    		myform.mid.focus();
+    		return false;
+    	}
+    	else if(pwd.trim() == "") {
+        alert("비밀번호는 1개이상의 문자와 특수문자 조합의 6~24 자리로 작성해주세요.");
+        myform.pwd.focus();
+        return false;
+      }
+      else if(!regNickName.test(nickName)) {
+        alert("닉네임은 한글만 사용가능합니다.");
+        myform.nickName.focus();
+        return false;
+      }
+      else if(!regName.test(name)) {
+        alert("성명은 한글과 영문대소문자만 사용가능합니다.");
+        myform.name.focus();
+        return false;
+      }
+      else if(!regEmail.test(email)) {
+        alert("이메일 형식에 맞지않습니다.");
+        myform.email1.focus();
+        return false;
+      }
+      
+    	let spin = "<div class='text-center'><div class='spinner-border text-muted'></div> 메일 발송중입니다. 잠시만 기다려주세요 <div class='spinner-border text-muted'></div></div>";
+      $("#demoSpin").html(spin);
+      
+      $.ajax({
+    	  url  : "${ctp}/member/memberEmailCheck",
+    	  type : "post",
+    	  data : {email : email},
+    	  success:function(res) {
+    		  if(res == 1) {
+    			  alert("인증번호가 발송되었습니다.\n메일확인후 인증번호를 입력해주세요.");
+    			  let str = '<div class="input-group">';
+    			  str += '<input type="text" name="checkKey" id="checkKey" class="form-control"/>';
+    			  str += '<div class="input-group-append">';
+    		    str += '<input type="button" value="인증번호확인" onclick="emailCertificationOk()"/>';
+    			  str += '</div>';
+    			  str += '</div>';
+    			  $("#demoSpin").html(str);
+    		  }
+    		  else alert("인증확인버튼을 다시 눌러주세요!");
+    	  },
+    	  error : function() {
+    		  alert("전송오류!");
+    	  }
+      });
+    }
+    
+    function emailCertificationOk() {
+    	let checkKey = $("#checkKey").val();
+    	if(checkKey.trim() == "") {
+    		alert("전송받은 메일에서 인증받은 키를 입력하세요");
+    		$("#checkKey").focus();
+    		return false;
+    	}
+    	
+    	$.ajax({
+    		url  : "${ctp}/member/memberEmailCheckOk",
+      	  type : "post",
+      	  data : {checkKey : checkKey},
+      	  success:function(res) {
+      		  if(res == "1") {
+	      			$("#demoSpin").hide();
+	      			$("#certificationBtn").hide();
+	      			$("#addContent").show();
+	      			$("#fCheckBtn").show();
+      		  }
+      		else alert("인증번호 오류~~ 메일을 통해서 발급받은 인증번호를 확인하세요.");
+      	  },
+      	  error : function() {
+      		  alert("전송오류!");
+      	  }
+    	});
+    }
   </script>
 </head>
 <body>
@@ -250,7 +339,8 @@
 			</div>
 			<div class="form-group">
 				<div class="form-check-inline">
-					<span class="input-group-text">성별 :</span> &nbsp; &nbsp;
+					<span class="input-group-text">성별 :</span>
+					&nbsp; &nbsp;
 					<label class="form-check-label">
 						<input type="radio" class="form-check-input" name="gender" value="남자" checked>
 						남자
@@ -270,7 +360,8 @@
 			<div class="form-group">
 				<div class="input-group mb-3">
 					<div class="input-group-prepend">
-						<span class="input-group-text">전화번호 :</span> &nbsp;&nbsp;
+						<span class="input-group-text">전화번호 :</span>
+						&nbsp;&nbsp;
 						<select name="tel1" class="custom-select">
 							<option value="010" selected>010</option>
 							<option value="02">서울</option>
@@ -329,7 +420,8 @@
 			</div>
 			<div class="form-group">
 				<div class="form-check-inline">
-					<span class="input-group-text">취미</span> &nbsp; &nbsp;
+					<span class="input-group-text">취미</span>
+					&nbsp; &nbsp;
 					<label class="form-check-label">
 						<input type="checkbox" class="form-check-input" value="등산" name="hobby" />
 						등산
@@ -384,7 +476,8 @@
 			</div>
 			<div class="form-group">
 				<div class="form-check-inline">
-					<span class="input-group-text">정보공개</span> &nbsp; &nbsp;
+					<span class="input-group-text">정보공개</span>
+					&nbsp; &nbsp;
 					<label class="form-check-label">
 						<input type="radio" class="form-check-input" name="userInfor" value="공개" checked />
 						공개

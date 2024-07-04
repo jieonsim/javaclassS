@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.spring.javaclassS.vo.CrimeVO;
+import com.spring.javaclassS.vo.KakaoAddressVO;
 import com.spring.javaclassS.vo.MemberVO;
 import com.spring.javaclassS.vo.UserVO;
 
@@ -31,5 +32,14 @@ public interface StudyDAO {
 	public CrimeVO getAnalyzeTotal(@Param("year") int year, @Param("police") String police);
 
 	public List<MemberVO> getMemberDetails();
+
+	public KakaoAddressVO getKakaoAddressSearch(@Param("address") String address);
+
+	public void setKakaoAddressInput(@Param("vo") KakaoAddressVO vo);
+
+	public List<KakaoAddressVO> getKakaoAddressList();
+
+	public int setKakaoAddressDelete(@Param("address") String address);
+
 
 }
