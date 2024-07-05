@@ -232,7 +232,7 @@ public class MemberController {
 			conn.setRequestMethod("POST");
 			// key값인 Authorizationr은 예약어임 / value는 앞에서 넘어온 토큰값이며, 앞에 공백 하나가 있어야함
 			conn.setRequestProperty("Authorization", " " + accessToken);
-			
+
 			// 카카오에서 정상적으로 처리되었다면 200번이 들어온다.
 			int responseCode = conn.getResponseCode();
 			System.out.println("responseCode : " + responseCode);
@@ -250,6 +250,29 @@ public class MemberController {
 
 		model.addAttribute("mVo", mVo);
 		return "member/memberMain";
+	}
+
+	// 회원가입시 이메일로 인증번호 전송하기
+	@ResponseBody
+	@RequestMapping(value = "/memberEmailCheck", method = RequestMethod.POST)
+	public String memberEmailCheckPost(String email, HttpSession session) throws MessagingException {
+		UUID uid = UUID.randomUUID();
+		String emailKey = uid.toString().substring(0, 8);
+		session.setAttribute("sEmailKey", emailKey);
+
+		mailSend(email, "이메일 인증키입니다.", "인증키 : " + emailKey);
+		return "1";
+	}
+
+	// 이메일 확인하기
+	@ResponseBody
+	@RequestMapping(value = "/memberEmailCheckOk", method = RequestMethod.POST)
+	public String memberEmailCheckOkPost(String checkKey, HttpSession session) throws MessagingException {
+		String sCheckKey = (String) session.getAttribute("sEmailKey");
+		if (checkKey.equals(sCheckKey))
+			return "1";
+		else
+			return "0";
 	}
 
 	@RequestMapping(value = "/memberJoin", method = RequestMethod.GET)
