@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.spring.javaclassS.vo.CrimeVO;
 import com.spring.javaclassS.vo.KakaoAddressVO;
 import com.spring.javaclassS.vo.MemberVO;
+import com.spring.javaclassS.vo.QrCodeVO;
 import com.spring.javaclassS.vo.UserVO;
 
 public interface StudyService {
@@ -20,7 +21,7 @@ public interface StudyService {
 	public ArrayList<String> getCityArrayList(String dodo);
 
 	public ArrayList<String> getUserMids();
-	
+
 	public HashMap<Object, Object> getUserDetails(String mid);
 
 	public UserVO getUserMidSearch(String mid);
@@ -28,7 +29,7 @@ public interface StudyService {
 	public ArrayList<UserVO> getUserMidList(String mid);
 
 	public void setSaveCrimeDate(CrimeVO vo);
-	
+
 	public void setDeleteCrimeDate(int year);
 
 	public ArrayList<CrimeVO> getListCrimeDate(int year);
@@ -53,5 +54,15 @@ public interface StudyService {
 
 	public int setKakaoAddressDelete(String address);
 
+	public String setQrCodeCreate(String realPath);
 
+	public String setQrCodeCreate1(String realPath, QrCodeVO vo);
+
+	public String setQrCodeCreate2(String realPath, QrCodeVO vo);
+
+	public String setQrCodeCreate3(String realPath, QrCodeVO vo);
+
+	public String setQrCodeCreate4(String realPath, QrCodeVO vo);
+
+	public QrCodeVO getQrCodeSearch(String qrCode);
 }

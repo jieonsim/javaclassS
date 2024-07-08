@@ -3,12 +3,15 @@ package com.spring.javaclassS.common;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class JavaclassProvide {
 	@Autowired
 	JavaMailSender mailSender;
-	
+
 	// urlPath에 파일 저장하는 메소드. fName : 업로드 파일명 / sFileName : 디비에 저장될 이름 / urlPath : 저장
 	// 경로
 	public void writeFile(MultipartFile fName, String sFileName, String urlPath) throws IOException {
@@ -69,7 +72,7 @@ public class JavaclassProvide {
 
 		return fileName;
 	}
-	
+
 	public String mailSend(String email, String title, String pwd) throws MessagingException {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
 				.currentRequestAttributes()).getRequest();
@@ -103,5 +106,13 @@ public class JavaclassProvide {
 		mailSender.send(message);
 
 		return "1";
+	}
+
+	public String newNameCreate(int len) {
+		Date today = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
+		String newName = sdf.format(today);
+		newName += RandomStringUtils.randomAlphanumeric(len) + "_";
+		return newName;
 	}
 }
