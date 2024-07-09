@@ -80,6 +80,7 @@
 					<a href="${ctp}/study/weather/weatherForm" class="w3-bar-item w3-button">날씨API</a>
 					<a href="${ctp}/study/captcha/captchaForm" class="w3-bar-item w3-button">캡챠연습</a>
 					<a href="${ctp}/study/qrCode/qrCodeForm" class="w3-bar-item w3-button">QR code</a>
+					<a href="${ctp}/study/thumbnail/thumbnailForm" class="w3-bar-item w3-button">썸네일 연습</a>
 					<a href="${ctp}/study/mail/mailForm" class="w3-bar-item w3-button">웹 차트</a>
 					<a href="${ctp}/study/mail/mailForm" class="w3-bar-item w3-button">트랜잭션</a>
 					<a href="#" class="w3-bar-item w3-button">스케줄러</a>

@@ -33,4 +33,6 @@ public interface MemberService {
 	public MemberVO getMemberNickNameEmailCheck(String nickName, String email);
 
 	public void setKaKaoMemberInput(String mid, String pwd, String nickName, String email);
+
+	public void setKakaoMemberInput(String mid, String pwd, String nickName, String email);
 }

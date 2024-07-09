@@ -8,54 +8,42 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>pdsInput.jsp</title>
 <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
-<!-- <script>
-    'use strict';
-    let cnt = 1;
-    
-    function fCheck() {
-    
-    	let fName = document.getElementById("fName").value;
-    	let maxSize = 1024 * 1024 * 30;	// 기본 단위 : Byte,   1024 * 1024 * 30 = 30MByte 허용
-    	let title = $("#title").val();
-    	
-    	if(fName.trim() == "") {
-    		alert("업로드할 파일을 선택하세요");
-    		return false;
-    	}
-    	else if(title.trim() == "") {
-    		alert("업로드할 파일을 선택하세요");
-    		return false;
-    	}
-    	
-    	// 파일사이즈와 확장자 체크하기
-    	let fileSize = 0;
-    	for(let i=1; i<=cnt; i++) {
-    		let imsiName = 'fName' + i;
-    		if(isNaN(document.getElementById(imsiName))) {
-    			let fName = document.getElementById(imsiName).value;
-    			if(fName != "") {
-    				fileSize += document.getElementById(imsiName).files[0].size;
-			    	let ext1 = fName.substring(fName.lastIndexOf(".")+1).toLowerCase();
-	    	    if(ext1 != 'jpg' && ext1 != 'gif' && ext1 != 'png' && ext1 != 'zip' && ext1 != 'hwp' && ext1 != 'ppt' && ext1 != 'pptx' && ext1 != 'doc' && ext1 != 'pdf' && ext1 != 'xlsx' && ext1 != 'txt') {
-	    		    alert("업로드 가능한 파일은 'jpg/gif/png/zip/hwp/ppt/pptx/doc/pdf/xlsx/txt'만 가능합니다.");
-	    		    return false;
-	    	    }
-    			}
-    		}
-    		
-    	if(fileSize > maxSize) {
-    		alert("업로드할 파일의 최대용량은 30MByte입니다.");
-    		return false;
-    	}
-    	else {
-    		myform.fSize.value = fileSize;
-    		//alert("파일 총 사이즈 : " + fileSize);
-    	}
-    		myform.submit();
-    	}
-    }
-    
-  </script> -->
+<script>
+	'use strict';
+
+	function fCheck() {
+		let fName = document.getElementById("fName").value;
+		let title = $("#title").val();
+		let ext = "";
+		let fileSize = 0;
+		let maxSize = 1024 * 1024 * 20; // 기본 단위 : Byte,   1024 * 1024 * 20 = 20MByte 허용
+
+		let fileLength = document.getElementById("fName").files.length; // 선택한 파일의 갯수
+		if (fileLength < 1) {
+			alert("업로드할 파일을 선택하세요");
+			return false;
+		} else if (title.trim() == "") {
+			alert("제목을 입력하세요.");
+			return false;
+		}
+
+		for (let i = 0; i < fileLength; i++) {
+			fName = document.getElementById("fName").files[i].name; // 선택된 1개의 파일이름가져오기
+			ext = fName.substring(fName.lastIndexOf(".") + 1).toLowerCase();
+			fileSize = document.getElementById("fName").files[i].size;
+			if (ext != 'jpg' && ext != 'gif' && ext != 'png' && ext != 'zip') {
+				alert("업로드 가능한 파일은 'jpg/gif/png/zip'만 가능합니다.");
+			}
+		}
+
+		if (fileSize > maxSize) {
+			alert("업로드 파일의 최대용량은 20MByte입니다.");
+		} else {
+			myform.fSize.value = fileSize;
+			myform.submit();
+		}
+	}
+</script>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/include/nav.jsp" />
@@ -108,7 +96,7 @@
 			<input type="hidden" name="hostIp" value="${pageContext.request.remoteAddr}" />
 			<input type="hidden" name="mid" value="${sMid}" />
 			<input type="hidden" name="nickName" value="${sNickName}" />
-			<input type="hidden" name="fSize" value="0"/>
+			<input type="hidden" name="fSize" value="0" />
 		</form>
 	</div>
 	<p>

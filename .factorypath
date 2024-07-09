@@ -89,4 +89,5 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/com/google/zxing/core/3.5.1/core-3.5.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/beust/jcommander/1.82/jcommander-1.82.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/github/jai-imageio/jai-imageio-core/1.4.0/jai-imageio-core-1.4.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/net/coobird/thumbnailator/0.4.20/thumbnailator-0.4.20.jar" enabled="true" runInBatchMode="false"/>
 </factorypath>

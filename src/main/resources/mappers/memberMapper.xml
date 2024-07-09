@@ -37,6 +37,10 @@
 		insert into member2 (mid, pwd, nickName, email, name, level) values (#{mid}, #{pwd}, #{nickName}, #{email}, #{nickName}, 2)
 	</insert>
 
+	<insert id="setKakaoMemberInput">
+		insert into member2 (mid, pwd, nickName, email, name, level) values (#{mid}, #{pwd}, #{nickName}, #{email}, #{nickName}, 2);
+	</insert>
+
 	<update id="setMemberPasswordUpdate">
 		update member2 set pwd = #{pwd} where mid = #{mid}
 	</update>

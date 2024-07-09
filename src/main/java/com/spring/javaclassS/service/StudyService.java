@@ -65,4 +65,6 @@ public interface StudyService {
 	public String setQrCodeCreate4(String realPath, QrCodeVO vo);
 
 	public QrCodeVO getQrCodeSearch(String qrCode);
+
+	public String setThumbnailCreate(MultipartFile file);
 }
