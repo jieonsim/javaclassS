@@ -70,6 +70,7 @@ import com.spring.javaclassS.common.ARIAUtil;
 import com.spring.javaclassS.common.SecurityUtil;
 import com.spring.javaclassS.service.DbtestService;
 import com.spring.javaclassS.service.StudyService;
+import com.spring.javaclassS.vo.ChartVO;
 import com.spring.javaclassS.vo.CrawlingVO;
 import com.spring.javaclassS.vo.CrimeVO;
 import com.spring.javaclassS.vo.KakaoAddressVO;
@@ -1220,4 +1221,48 @@ public class StudyController {
 		return "study/thumbnail/thumbnailResult";
 	}
 
+	@RequestMapping(value = "/chart/chartForm", method = RequestMethod.GET)
+	public String chartFormGet(Model model,
+			@RequestParam(name = "part", defaultValue = "barVChart", required = false) String part) {
+		model.addAttribute("part", part);
+		return "study/chart/chartForm";
+	}
+
+	@RequestMapping(value = "/chart2/chart2Form", method = RequestMethod.GET)
+	public String chart2FormGet(Model model,
+			@RequestParam(name = "part", defaultValue = "barVChart", required = false) String part) {
+		model.addAttribute("part", part);
+		return "study/chart2/chart2Form";
+	}
+
+	@RequestMapping(value = "/chart2/googleChart2", method = RequestMethod.POST)
+	public String googleChart2Post(Model model, ChartVO vo) {
+		model.addAttribute("vo", vo);
+		return "study/chart2/chart2Form";
+	}
+
+	// 최근 방문자수 선형 차트로 표시하기
+	@RequestMapping(value = "/chart2/googleChart2Recently", method = RequestMethod.GET)
+	public String googleChart2RecentlyGet(Model model, ChartVO vo) {
+		// System.out.println("part : " + vo.getPart());
+		List<ChartVO> vos = null;
+		if (vo.getPart().equals("lineChartVisitCount")) {
+			vos = studyService.getRecentlyVisitCount(1);
+			// vos 자료를 차트에 표시처리가 잘 되지 않을 경우에는 각각의 자룔를 다시 편딥해서 차트로 보내줘야 한다.
+			String[] visitDates = new String[7];
+			int[] visitCounts = new int[7];
+
+			for (int i = 0; i < 7; i++) {
+				visitDates[i] = vos.get(i).getVisitDate();
+				visitCounts[i] = vos.get(i).getVisitCount();
+			}
+			model.addAttribute("vo", vo);
+			model.addAttribute("vo", vo);
+			model.addAttribute("최근 방문 일 수", vo);
+			model.addAttribute("vo", vo);
+
+		}
+		model.addAttribute("vo", vo);
+		return "study/chart2/chart2Form";
+	}
 }

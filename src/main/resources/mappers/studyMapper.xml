@@ -51,6 +51,15 @@
 	<select id="getQrCodeSearch" resultType="com.spring.javaclassS.vo.QrCodeVO">
 		select * from qrCode where qrCodeName = #{qrCode};
 	</select>
+	
+	<select id="getRecentlyVisitCount" resultType="com.spring.javaclassS.vo.ChartVO">
+		<if test="i == 1">
+			select substring(visitDate, 1, 10) as visitDate, visitCount from visit order by visitDate desc limit 7
+		</if>
+		<if test="i == 2">
+			select mid as visitDate, visitCnt as visitCount from member2 order by visitCnt desc limit 7
+		</if>
+	</select>
 
 	<insert id="setSaveCrimeDate">
 		insert into crime values (default, #{vo.year}, #{vo.police}, #{vo.robbery}, #{vo.theft}, #{vo.murder}, #{vo.violence});
