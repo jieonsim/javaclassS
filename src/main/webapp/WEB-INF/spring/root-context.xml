@@ -18,7 +18,7 @@
 	<!-- 데이터베이스 연동을 위한 환경설정(JDBC설정) -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/javaclass" />
+		<property name="url" value="jdbc:mysql://localhost:3306/javaclass?allowMultiQueries=true" />
 		<property name="username" value="root" />
 		<property name="password" value="1234" />
 	</bean>
@@ -36,6 +36,11 @@
 	
 	<!-- mapper의 정보(SqlSessionFactory 객체의 실행된 결과)를 주입하기 위한 dao 객체의 위치를 설정 -->
 	<mybatis-spring:scan base-package="com.spring.javaclassS.dao"/>
+	
+	<!-- Transaction(트랜잭션) 처리를 위한 bean 설정 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
 	
 	<!-- 메일 처리를 위한 Bean 등록하기 -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">

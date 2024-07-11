@@ -51,7 +51,7 @@
 	<select id="getQrCodeSearch" resultType="com.spring.javaclassS.vo.QrCodeVO">
 		select * from qrCode where qrCodeName = #{qrCode};
 	</select>
-	
+
 	<select id="getRecentlyVisitCount" resultType="com.spring.javaclassS.vo.ChartVO">
 		<if test="i == 1">
 			select substring(visitDate, 1, 10) as visitDate, visitCount from visit order by visitDate desc limit 7
@@ -59,6 +59,14 @@
 		<if test="i == 2">
 			select mid as visitDate, visitCnt as visitCount from member2 order by visitCnt desc limit 7
 		</if>
+	</select>
+
+	<select id="getTransactionList" resultType="com.spring.javaclassS.vo.TransactionVO">
+		select * from user order by idx desc
+	</select>
+
+	<select id="getTransactionList2" resultType="com.spring.javaclassS.vo.TransactionVO">
+		select * from user2 order by mid
 	</select>
 
 	<insert id="setSaveCrimeDate">
@@ -70,7 +78,25 @@
 	</insert>
 
 	<insert id="setQrCodeCreate">
-		insert into qrCode values (default,#{vo.mid},#{vo.name},#{vo.email},#{vo.movieName},#{vo.movieDate},#{vo.movieTime},#{vo.movieAdult},#{vo.movieChild},#{vo.publishDate},#{vo.qrCodeName});
+		insert into qrCode values
+		(default,#{vo.mid},#{vo.name},#{vo.email},#{vo.movieName},#{vo.movieDate},#{vo.movieTime},#{vo.movieAdult},#{vo.movieChild},#{vo.publishDate},#{vo.qrCodeName});
+	</insert>
+
+	<insert id="setTransactionUserInput">
+		insert into user values (default, #{vo.mid}, #{vo.name},#{vo.age},#{vo.address})
+	</insert>
+
+	<insert id="setTransactionListUser1Input">
+		insert into user values (default, #{vo.mid}, #{vo.name},#{vo.age},#{vo.address})
+	</insert>
+
+	<insert id="setTransactionListUser2Input">
+		insert into user2 values (#{vo.mid}, #{vo.job})
+	</insert>
+
+	<insert id="setTransactiontUserTotalInput">
+		insert into user values (default, #{vo.mid}, #{vo.name},#{vo.age},#{vo.address})
+		insert into user2 values (#{vo.mid}, #{vo.job})
 	</insert>
 
 	<delete id="setDeleteCrimeDate">

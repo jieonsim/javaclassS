@@ -11,6 +11,7 @@ import com.spring.javaclassS.vo.CrimeVO;
 import com.spring.javaclassS.vo.KakaoAddressVO;
 import com.spring.javaclassS.vo.MemberVO;
 import com.spring.javaclassS.vo.QrCodeVO;
+import com.spring.javaclassS.vo.TransactionVO;
 import com.spring.javaclassS.vo.UserVO;
 
 public interface StudyDAO {
@@ -50,4 +51,15 @@ public interface StudyDAO {
 
 	public List<ChartVO> getRecentlyVisitCount(@Param("i") int i);
 
+	public List<TransactionVO> getTransactionList();
+
+	public int setTransactionUserInput(@Param("vo") TransactionVO vo);
+
+	public List<TransactionVO> getTransactionList2();
+
+	public void setTransactionListUser1Input(@Param("vo") TransactionVO vo);
+
+	public void setTransactionListUser2Input(@Param("vo") TransactionVO vo);
+
+	public void setTransactiontUserTotalInput(@Param("vo") TransactionVO vo);
 }

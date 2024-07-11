@@ -48,7 +48,10 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -77,6 +80,7 @@ import com.spring.javaclassS.vo.KakaoAddressVO;
 import com.spring.javaclassS.vo.MailVO;
 import com.spring.javaclassS.vo.MemberVO;
 import com.spring.javaclassS.vo.QrCodeVO;
+import com.spring.javaclassS.vo.TransactionVO;
 import com.spring.javaclassS.vo.UserVO;
 
 @Controller
@@ -1264,5 +1268,60 @@ public class StudyController {
 		}
 		model.addAttribute("vo", vo);
 		return "study/chart2/chart2Form";
+	}
+
+	// backend check를 위한 validator 연습하기 폼
+	@RequestMapping(value = "/validator/validatorForm", method = RequestMethod.GET)
+	public String validatorFormGet(Model model) {
+		List<TransactionVO> vos = studyService.getTransactionList();
+
+		model.addAttribute("vos", vos);
+		return "study/validator/validatorForm";
+	}
+
+	// BackEnd Check를 위한 validator 연습하기
+	@RequestMapping(value = "/validator/validatorForm", method = RequestMethod.POST)
+	public String validatorFormPost(@Validated TransactionVO vo, BindingResult bindingResult) {
+
+		if(bindingResult.hasFieldErrors()) {
+			System.out.println("error 발생");
+			System.out.println("에러 : " + bindingResult);
+			return "redirect:/message/backendCheckNo";
+		}
+		
+		int res = studyService.setTransactionUserInput(vo);
+		
+		if(res != 0) return "redirect:/message/transactionUserInputOk?tempFlag=validator";
+		else return "redirect:/message/transactionUserInputNo";
+	}
+
+	// Transaction(트랜잭션)을 위한 연습하기 폼
+	@RequestMapping(value = "/transaction/transactionForm", method = RequestMethod.GET)
+	public String transactionFormGet(Model model) {
+		List<TransactionVO> vos = studyService.getTransactionList();
+		List<TransactionVO> vos2 = studyService.getTransactionList2();
+
+		model.addAttribute("vos", vos);
+		model.addAttribute("vos2", vos2);
+		return "study/transaction/transactionForm";
+	}
+
+	// Transaction(트랜잭션)을 위한 연습하기 폼 처리1 각각 가입
+	@Transactional
+	@RequestMapping(value = "/transaction/transactionForm", method = RequestMethod.POST)
+	public String transactionFormPost(TransactionVO vo) {
+		studyService.setTransactionListUser1Input(vo);
+		studyService.setTransactionListUser2Input(vo);
+
+		return "redirect:/message/transactionUserInputOk?tempFlag=transaction";
+	}
+
+	// Transaction(트랜잭션)을 위한 연습하기 폼 처리 한번에 가입
+	@ResponseBody
+	@RequestMapping(value = "/transaction/transaction2", method = RequestMethod.POST)
+	public String transaction2Post(TransactionVO vo) {
+		studyService.setTransactiontUserTotalInput(vo);
+
+		return "1";
 	}
 }

@@ -13,6 +13,7 @@ public class MessageController {
 	@RequestMapping(value = "/message/{msgFlag}", method = RequestMethod.GET)
 	public String getMessage(Model model, @PathVariable String msgFlag,
 			@RequestParam(name = "mid", defaultValue = "", required = false) String mid,
+			@RequestParam(name = "tempFlag", defaultValue = "", required = false) String tempFlag,
 			@RequestParam(name = "idx", defaultValue = "", required = false) String idx,
 			@RequestParam(name = "pag", defaultValue = "1", required = false) String pag,
 			@RequestParam(name = "pageSize", defaultValue = "5", required = false) String pageSize) {
@@ -31,7 +32,13 @@ public class MessageController {
 			model.addAttribute("url", "/user/userList");
 		} else if (msgFlag.equals("dbtestDeleteOk")) {
 			model.addAttribute("msg", "회원 삭제 완료!");
-			model.addAttribute("url", "/dbtest/dbtestList");
+			if (tempFlag.equals("validator")) {
+				model.addAttribute("url", "/study/validator/validatorForm");
+			} else if (tempFlag.equals("transaction")) {
+				model.addAttribute("url", "/study/transaction/transactionForm");
+			} else {
+				model.addAttribute("url", "/dbtest/dbtestList");
+			}
 		} else if (msgFlag.equals("dbtestDeleteNo")) {
 			model.addAttribute("msg", "회원 삭제 실패~~");
 			model.addAttribute("url", "/dbtest/dbtestList");
@@ -140,6 +147,21 @@ public class MessageController {
 		} else if (msgFlag.equals("midSameSearch")) {
 			model.addAttribute("msg", "같은 아이디를 가진 회원이 존재합니다.\\n아이디 확인 후 다시 로그인해주세요.");
 			model.addAttribute("url", "/member/memberLogin");
+		} else if (msgFlag.equals("transactionUserInputOk")) {
+			model.addAttribute("msg", "user 테이블에 회원이 등록되었습니다.");
+			if (tempFlag.equals("validator")) {
+				model.addAttribute("url", "/study/validator/validatorForm");
+			} else if (tempFlag.equals("transaction")) {
+				model.addAttribute("url", "/study/transaction/transactionForm");
+			}
+		} 
+		else if (msgFlag.equals("transactionUserInputNo")) {
+			model.addAttribute("msg", "user 테이블에 회원이 등록 실패하였습니다.");
+			model.addAttribute("url", "/study/validator/validatorForm");
+		}
+		else if (msgFlag.equals("backendCheckNo")) {
+			model.addAttribute("msg", "저장실패 입력된 자료를 확인해보세요.(BackEnd Check)");
+			model.addAttribute("url", "/study/validator/validatorForm");
 		}
 
 		return "include/message";
