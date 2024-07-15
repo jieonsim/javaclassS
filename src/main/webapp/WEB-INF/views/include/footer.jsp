@@ -12,4 +12,5 @@
 		Powered by
 		<a href="${ctp}/" target="_blank">♣ jieon ♣</a>
 	</p>
+	<p class="text-center"><%=request.getSession().getServletContext().getRealPath("/") %></p>
 </footer>

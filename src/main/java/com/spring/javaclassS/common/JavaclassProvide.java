@@ -73,9 +73,9 @@ public class JavaclassProvide {
 		return fileName;
 	}
 
+	// 메일 전송하기(아이디 찾기, 비밀번호 찾기, 스케줄러 통한 메일 전송)
 	public String mailSend(String email, String title, String pwd) throws MessagingException {
-		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-				.currentRequestAttributes()).getRequest();
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 		String content = "";
 
 		// 메일 전송을 위한 객체 : MimeMessage(), MimeMessageHelper()
@@ -89,7 +89,8 @@ public class JavaclassProvide {
 
 		// 메세지 보관함의 내용(content)에 발신자의 필요한 정보를 추가로 담아서 전송 처리한다.
 		content = content.replace("\n", "<br>");
-		content += "<br><hr><h3> 임시 비밀번호 : " + pwd + "</h3><hr>";
+		/* content += "<br><hr><h3> 임시 비밀번호 : " + pwd + "</h3><hr>"; */
+		content += "<br><hr><h3>" + pwd + "</h3><hr>";
 		content += "<img src='cid:loginImage' width='500px'>";
 		content += "<p>방문하기 : <a href='http://49.142.157.251:9090/javaclassJ8/main'>javaclass</a></p>";
 		content += "<hr>";
@@ -98,8 +99,7 @@ public class JavaclassProvide {
 		// inline 그림 보내기
 		// request.getSession().getServletContext().getRealPath("/resources/images/login.jpg");
 		// 본문에 기재될 그림파일의 경로를 별도로 표시시켜준다. 그런 후 다시 보관함에 저장한다.
-		FileSystemResource inlineImage = new FileSystemResource(
-				request.getSession().getServletContext().getRealPath("/resources/images/login.jpg"));
+		FileSystemResource inlineImage = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/login.jpg"));
 		messageHelper.addInline("loginImage", inlineImage);
 
 		// 메일 전송하기

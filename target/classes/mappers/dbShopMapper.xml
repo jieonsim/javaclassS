@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javaclassS.dao.DbShopDAO">
+	<select id="getCategoryMainOne" resultType="com.spring.javaclassS.vo.DbProductVO">
+		select * from categoryMain where categoryMainCode=#{categoryMainCode}|| categoryMainName=#{categoryMainName}
+	</select>
+	
+	<select id="getCategoryMain" resultType="com.spring.javaclassS.vo.DbProductVO">
+		select * from categoryMain order by categoryMainCode desc
+	</select>
+	
+	<select id="getCategoryMiddleOne" resultType="com.spring.javaclassS.vo.DbProductVO">
+		select * from categoryMiddle 
+   		where categoryMainCode=#{vo.categoryMainCode}and categoryMiddleCode=#{vo.categoryMiddleCode} and categoryMiddleName=#{vo.categoryMiddleName};
+	</select>
+	
+	<insert id="setCategoryMainInput">
+		insert into categoryMain values (#{vo.categoryMainCode},#{vo.categoryMainName})
+	</insert>
+	
+	 <insert id="setCategoryMiddleInput">
+    	insert into categoryMiddle values (#{vo.categoryMainCode},#{vo.categoryMiddleCode},#{vo.categoryMiddleName});
+  	</insert>
+	
+	<delete id="setCategoryMainDelete">
+		delete from categoryMain where categoryMainCode = #{categoryMainCode}
+	</delete>
+</mapper>
