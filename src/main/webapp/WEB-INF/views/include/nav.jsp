@@ -97,7 +97,7 @@
 					<a href="${ctp}/" class="w3-bar-item w3-button">일정관리</a>
 					<a href="${ctp}/" class="w3-bar-item w3-button">Photo Gallery</a>
 					<a href="${ctp}/" class="w3-bar-item w3-button">DB 채팅</a>
-					<a href="${ctp}/" class="w3-bar-item w3-button">웹소켓 채팅</a>
+					<a href="${ctp}/webSocket/webSocket" class="w3-bar-item w3-button">웹소켓 채팅</a>
 					<a href="${ctp}/member/memberList" class="w3-bar-item w3-button">회원리스트</a>
 					<a href="${ctp}/member/memberPwdCheck/p" class="w3-bar-item w3-button">비밀번호변경</a>
 					<a href="${ctp}/member/memberPwdCheck/i" class="w3-bar-item w3-button">회원정보수정</a>

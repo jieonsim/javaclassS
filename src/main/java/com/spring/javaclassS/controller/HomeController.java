@@ -68,32 +68,42 @@ public class HomeController {
 		fos.close();
 	}
 
-	@RequestMapping(value="/fileDownAction", method=RequestMethod.GET)
-	public void fileDownActionGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	@RequestMapping(value = "/fileDownAction", method = RequestMethod.GET)
+	public void fileDownActionGet(HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
 		String path = request.getParameter("path");
 		String file = request.getParameter("file");
-		
-		if(path.equals("pds")) path += "/temp/";
-		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/" + path) + file;;
-		
+
+		if (path.equals("pds"))
+			path += "/temp/";
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/" + path)
+				+ file;
+		;
+
 		File downFile = new File(realPath);
 		String downFileName = new String(file.getBytes("UTF-8"), "8859_1");
-		response.setHeader("Content-Disposition", "attachment;filename="+ downFileName);
+		response.setHeader("Content-Disposition", "attachment;filename=" + downFileName);
 		// "Content-Disposition", "attachment;filename=" : 예약어
-		
+
 		FileInputStream fis = new FileInputStream(downFile);
 		ServletOutputStream sos = response.getOutputStream();
-		
+
 		byte[] bytes = new byte[2048];
 		int data;
-		while((data = fis.read(bytes, 0, bytes.length)) != -1) {
+		while ((data = fis.read(bytes, 0, bytes.length)) != -1) {
 			sos.write(bytes, 0, data);
 		}
 		sos.flush();
 		sos.close();
 		fis.close();
-		
+
 		// 다운로드 완료 후에 서버에 저장된 zip 파일을 삭제 처리한다.
 		downFile.delete();
+	}
+
+	// 채팅창 띄우기
+	@RequestMapping(value = "/webSocket/webSocket", method = RequestMethod.GET)
+	public String webSocketGet() {
+		return "webSocket/webSocket";
 	}
 }
