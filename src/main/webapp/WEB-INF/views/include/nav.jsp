@@ -97,7 +97,7 @@
 					<a href="${ctp}/dbShop/dbProductList" class="w3-bar-item w3-button">상품리스트</a>
 					<a href="${ctp}/dbShop/dbCartList" class="w3-bar-item w3-button">장바구니</a>
 					<a href="${ctp}/dbShop/dbMyOrder" class="w3-bar-item w3-button">주문(배송)현황</a>
-					<a href="${ctp}/dbShop/payment/payment" class="w3-bar-item w3-button">결제연습</a>
+					<a href="${ctp}/dbShop/payment/payment" class="w3-bar-item w3-button">결재연습</a>
 					<a href="${ctp}/" class="w3-bar-item w3-button">QnA</a>
 					<a href="${ctp}/" class="w3-bar-item w3-button">1:1문의</a>
 				</div>
