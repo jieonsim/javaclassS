@@ -2,6 +2,8 @@ package com.spring.javaclassS.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +17,9 @@ import com.spring.javaclassS.common.JavaclassProvide;
 import com.spring.javaclassS.pagination.PageProcess;
 import com.spring.javaclassS.service.DbShopService;
 import com.spring.javaclassS.service.MemberService;
+import com.spring.javaclassS.vo.DbBaesongVO;
+import com.spring.javaclassS.vo.DbOrderVO;
+import com.spring.javaclassS.vo.DbPayMentVO;
 import com.spring.javaclassS.vo.DbProductVO;
 
 @Controller
@@ -170,5 +175,19 @@ public class DbShopController {
 		model.addAttribute("price", mainPrice);
 		
 		return "admin/dbShop/dbShopList";
+	}
+	
+
+	// 결제시스템(결제창 호출) - 결제 API이용
+	@RequestMapping(value = "/payment", method = RequestMethod.POST)
+	public String paymentPost(DbOrderVO orderVo, DbPayMentVO payMentVO, DbBaesongVO baesongVO,
+			HttpSession session, Model model) {
+		model.addAttribute("payMentVO", payMentVO);
+
+		session.setAttribute("sPayMentVO", payMentVO);
+		session.setAttribute("sBaesongVO", baesongVO);
+
+		return "dbShop/paymentOk";
+		// return "redirect:/dbShop/paymentResult";
 	}
 }
